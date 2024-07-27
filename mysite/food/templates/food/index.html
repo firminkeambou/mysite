@@ -1,0 +1,44 @@
+{%  extends "food/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First template</title>
+</head>
+<body>
+
+  {% block body%}
+
+    <h1>List of Items</h1>
+
+
+    {%  for item in item_list        %}
+    
+    <div class="row"> 
+      <div class="col-md-3 offset-md-2 my-2"> <!-- on a medium device we need offset of 2 {{item.item_image}}-->
+       <!-- <img class="card" height="150px" src=" {% static 'food/images/burger.jpg' %}" />  (this is for local and static images)-->
+       
+ 
+       
+       
+       <img class="card" height="150px" width='200px' src=" {{item.item_image}}" />
+      
+      </div>
+      <div class="col-md-4 my-2"> 
+          <h3>{{item.item_name}}</h3>
+          <h5>{{item.item_desc}}</h5>
+          <h6>${{item.item_price}}</h6>
+      </div>
+      <div class="col-md-2 my-2"> 
+        <a href="{% url 'food:detail' item.id  %}" class="btn btn-success"> Details</a>
+      </div>
+    </div>
+ 
+  {% endfor %}
+  
+  {% endblock %}
+</body>
+</html>
+
