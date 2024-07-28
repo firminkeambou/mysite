@@ -4,6 +4,8 @@ from .models import Item
 from .forms import ItemForm
 from django.template import loader
 from django.contrib.auth.decorators import login_required
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 # Create your views here.
 ## first method for index view
 '''def index(request):
@@ -18,7 +20,7 @@ from django.contrib.auth.decorators import login_required
 ## second method for index view (optimal)
 
 
-@login_required
+@login_required  # decorator that means the connexion is mandatory
 def index(request):
     item_list = Item.objects.all()
     context ={
@@ -26,19 +28,36 @@ def index(request):
     }
     return render(request,'food/index.html',context)
 
+# As index view above just list a list of items , we can rewrite it using class based views  as follow
 
+
+
+class IndexClassView(ListView):
+    model = Item
+    template_name = 'food/index.html'
+    context_object_name = 'item_list'
+
+
+##################
 def item(request):
     
     return HttpResponse ('<h1><u>This is an item view</u></h1> ')
 
 
 def detail(request,item_id):
-    item = Item.objects.get(pk=item_id)
-    context = {
-        'item': item,
+   item = Item.objects.get(pk=item_id)
+   context = {
+       'item': item,
     }
     #return HttpResponse("This is item no/id %s" %item_id)
-    return render(request,'food/detail.html',context)
+   return render(request,'food/detail.html',context)
+
+# class based view for details
+class DetailClassView(DetailView):
+    model = Item
+    template_name = 'food/detail.html'
+    # as you can see, we don't need to pass a context any more, django will be able to identified a record  by using "object" or "item" (because we are dealing with Item Model) in the template
+    #context_object_name = 'item' 
 
 def create_item(request):
     form = ItemForm(request.POST or None)
