@@ -6,6 +6,7 @@ from django.template import loader
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 # Create your views here.
 ## first method for index view
 '''def index(request):
@@ -66,6 +67,17 @@ def create_item(request):
         form.save()
         return redirect('food:index')  # this means to follow the path that the name is "index", and the namespace= "food" ans defined in the url views by app_name=food
     return render(request,'food/item-form.html',{'form': form}) # the last part is the context
+
+## class based for "create_item" so we can easily associate Apps
+class CreateItem(CreateView):
+    model = Item
+    fields = ['item_name','item_desc','item_price','item_image']
+    template_name = 'food/item-form.html'
+    def form_valid(self,form):
+        form.instance.user_name = self.request.user  # this is kind of association User
+
+        return super().form_valid(form)
+
 
 def update_item(request, item_id):
     item = Item.objects.get(pk=item_id)  # or  Item.objects.get(id=item_id)

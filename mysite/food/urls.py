@@ -22,8 +22,12 @@ urlpatterns = [
     # /food/item/i  based on class views
     path('item/<int:pk>/', views.DetailClassView.as_view(),
          name='detail'),  # get specific item
+
     # /food/add
-    path('add', views.create_item, name='create_item'),
+          #path('add', views.create_item, name='create_item'),
+     #/food/add  replaced by a class based view as follow:
+
+     path('add', views.CreateItem.as_view(), name='create_item'),
     # edit item
     path('update/<int:item_id>/', views.update_item, name='update_item'),
     # delete item
